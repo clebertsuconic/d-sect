@@ -57,8 +57,9 @@ public class JVMTIInterface {
       if (objects.length > expectedInstances) {
 
          if (reportDepth > 0) {
-            //String report = jvmtiInterface.exploreObjectReferences(reportDepth, true, objects);
             String report = jvmtiInterface.findRoots(10, true, objects);
+            System.out.println("Report of roots:" + report);
+            //report = jvmtiInterface.exploreObjectReferences(reportDepth, false, objects);
             throw new UnexpectedLeak(clazzName + " has " + objects.length + " elements while we expected " + expectedInstances + "\n" + report);
          } else {
             throw new UnexpectedLeak(clazzName + " has " + objects.length + " elements while we expected " + expectedInstances);
@@ -182,18 +183,32 @@ public class JVMTIInterface {
     * relationships according to the rule determined by JVMTI documentation.
     */
    public Field getObjectField(Class<?> clazz, int fieldId) {
+      System.err.println("Looking for field " + fieldId + " on class " + clazz);
       ArrayList<Class<?>> list = new ArrayList<Class<?>>();
+
+      System.err.println("Clazz::" + clazz);
       list.add(clazz);
       while ((clazz = clazz.getSuperclass()) != null) {
+         System.err.println("Clazz::" + clazz);
          list.add(clazz);
       }
 
       for (int i = list.size() - 1; i >= 0; i--) {
+         System.err.println("Looking up for fields on "+ list.get(i));
          Field fields[] = ((Class) list.get(i)).getDeclaredFields();
          if (fieldId < fields.length) {
+            for (int f = 0; f < fields.length; f++) {
+               System.err.print("Field[" + f + "]==" + fields[f]);
+               if (f == fieldId) {
+                  System.err.println("<<<<<");
+               } else {
+                  System.err.println();
+               }
+            }
             return fields[fieldId];
          }
          fieldId -= fields.length;
+         System.err.println("Removing fieldID = " + fields.length + " from " + list.get(i));
       }
       return null;
    }
