@@ -20,6 +20,7 @@ package com.dsect.jvmti;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class FindHolderTest {
@@ -75,6 +76,7 @@ public class FindHolderTest {
    }
    /** This method will show an object leaking, and a report to where is the reference on it */
    @Test
+   @Ignore
    public void testNoLeak() throws Exception {
 
       TestClass testClass = new TestClass(null);

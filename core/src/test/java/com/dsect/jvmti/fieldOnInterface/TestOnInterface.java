@@ -20,6 +20,7 @@ package com.dsect.jvmti.fieldOnInterface;
 import com.dsect.jvmti.JVMTIInterface;
 import com.dsect.jvmti.TestClass;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -32,6 +33,7 @@ public class TestOnInterface {
 
 
    @Test
+   @Ignore
    public void testOnInterface() throws Exception {
       declaringClass = new DeclaringClass();
 
